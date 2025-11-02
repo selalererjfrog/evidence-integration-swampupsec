@@ -118,7 +118,7 @@ jobs:
 
       - name: Create JIRA evidence
         run: |
-          SUBJECT_PATH="quotopia-dev-docker/${{ env.BUILD_NAME }}/${{ env.BUILD_NUMBER }}/list.manifest.json"
+          SUBJECT_PATH="quotopia-proj-dev-docker/${{ env.BUILD_NAME }}/${{ env.BUILD_NUMBER }}/list.manifest.json"
           echo "SUBJECT_PATH=$SUBJECT_PATH"
 
           if [ -f ./jira/helper/transformed_jira_data.json ]; then

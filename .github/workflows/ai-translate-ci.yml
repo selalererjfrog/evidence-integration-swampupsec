@@ -85,7 +85,7 @@ jobs:
           --cache-to type=registry,ref=${{ env.DOCKER_REGISTRY }}/ai-translate:cache,mode=max \
           --tag ${{ env.DOCKER_REGISTRY }}/ai-translate:${{ github.run_number }} \
           --metadata-file=build-metadata --output=type=image --push .
-        jf rt build-docker-create quotopia-dev-docker  \
+        jf rt build-docker-create quotopia-proj-dev-docker  \
           --image-file build-metadata --build-name ai-translate --build-number ${{ github.run_number }}
 
     - name: Verify Docker image
@@ -123,7 +123,7 @@ jobs:
 
     - name: Create evidence from Grype scan result
       run: |
-        jf evd create --subject-repo-path quotopia-dev-docker/ai-translate/${{ github.run_number }}/list.manifest.json \
+        jf evd create --subject-repo-path quotopia-proj-dev-docker/ai-translate/${{ github.run_number }}/list.manifest.json \
           --predicate grype-output.json --provider-id anchore --predicate-type https://anchore.com/evidence/grype/v1
 
     - name: Publish buildinfo
