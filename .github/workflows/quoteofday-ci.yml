@@ -166,12 +166,16 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
+        set +e
         echo "🔍 Creating evidence on docker image..."
-        cd quoteofday
+        cd quoteofday || exit 1
         jf evd create --subject-repo-path quotopia-proj-dev-docker/quoteofday/${{ github.run_number }}/list.manifest.json  \
           --predicate ./test-evidence.json --predicate-type https://jfrog.com/evidence/test-results/v1 \
-          --markdown ./test-evidence.md --provider-id junit
+          --markdown ./test-evidence.md --provider-id junit || exit 1
         jf evd create --package-name quoteofday --package-version ${{ github.run_number }} --package-repo-name quotopia-proj-dev-docker --integration sonar
+        if [ "$?" != "0" ]; then
+            echo "WARN: Failed to create Sonar evidence."
+        fi
       
     - name: Test Docker image
       run: |
