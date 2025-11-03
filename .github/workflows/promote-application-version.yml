@@ -147,10 +147,12 @@ jobs:
           
           # Pull quoteofday image
           echo "📦 Pulling quoteofday image..."
+          echo "Command: docker pull ${{ env.DOCKER_REGISTRY }}/quoteofday:${{ steps.get-images.outputs.quote_version }}"
           docker pull ${{ env.DOCKER_REGISTRY }}/quoteofday:${{ steps.get-images.outputs.quote_version }}
           
           # Pull quotopia-ui image
           echo "📦 Pulling quotopia-ui image..."
+          echo "Command: docker pull ${{ env.DOCKER_REGISTRY }}/quotopia-ui:${{ steps.get-images.outputs.ui_version }}"
           docker pull ${{ env.DOCKER_REGISTRY }}/quotopia-ui:${{ steps.get-images.outputs.ui_version }}
           
           echo "✅ All images pulled successfully"
