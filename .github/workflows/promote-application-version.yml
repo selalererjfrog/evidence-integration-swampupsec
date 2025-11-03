@@ -94,8 +94,10 @@ jobs:
         run: |
           echo "🔐 Logging into JFrog Artifactory Docker registry..."
           echo "Registry: ${{ env.DOCKER_REGISTRY }}"
-          echo "Command: docker login -u ${{ vars.JF_USER }} --password-stdin ${{ env.DOCKER_REGISTRY }}"
-          echo ${{ secrets.DOCKER_QA_TOKEN }} | docker login -u ${{ vars.JF_USER }} --password-stdin ${{ env.DOCKER_REGISTRY }}
+          #echo "Command: docker login -u ${{ vars.JF_USER }} --password-stdin ${{ env.DOCKER_REGISTRY }}"
+          #echo ${{ secrets.DOCKER_QA_TOKEN }} | docker login -u ${{ vars.JF_USER }} --password-stdin ${{ env.DOCKER_REGISTRY }}
+          echo "Command: docker login -uselal --password-stdin swampupsec.jfrog.io"
+          echo ${{ secrets.DOCKER_QA_TOKEN }} | docker login -uselal --password-stdin swampupsec.jfrog.io
           echo "✅ Successfully logged into Docker registry"
 
       - name: Get latest Docker images from Artifactory for QA environment
