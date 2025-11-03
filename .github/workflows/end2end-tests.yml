@@ -11,7 +11,6 @@ jobs:
     env:
       JFROG_CLI_KEY_ALIAS: ${{ vars.JFROG_CLI_KEY_ALIAS }}
       JFROG_CLI_SIGNING_KEY: ${{ secrets.JFROG_CLI_SIGNING_KEY }}
-      DOCKER_REGISTRY: apptrustswampupc.jfrog.io/quotopia-proj-qa-docker-local
     
     steps:
     - name: Checkout code
@@ -36,8 +35,8 @@ jobs:
     - name: Login to Docker Registry
       run: |
         echo "🔐 Logging into JFrog Artifactory Docker registry..."
-        echo "Registry: ${{ env.DOCKER_REGISTRY }}"
-        echo ${{ secrets.JF_ACCESS_TOKEN }} | docker login -u ${{ vars.JF_USER }} --password-stdin ${{ env.DOCKER_REGISTRY }}
+        echo "Registry: ${{ vars.DOCKER_REGISTRY }}"
+        echo ${{ secrets.JF_ACCESS_TOKEN }} | docker login -u ${{ vars.JF_USER }} --password-stdin ${{ vars.DOCKER_REGISTRY }}
         echo "✅ Successfully logged into Docker registry"
 
     - name: Get latest Docker images from Artifactory for QA environment
@@ -72,8 +71,8 @@ jobs:
         echo "ui_version=$UI_IMAGE_TAG" >> $GITHUB_OUTPUT
         
         echo "📋 Image Summary:"
-        echo "- Quoteofday: ${{ env.DOCKER_REGISTRY }}/quoteofday:$QUOTE_IMAGE_TAG"
-        echo "- Quotopia UI: ${{ env.DOCKER_REGISTRY }}/quotopia-ui:$UI_IMAGE_TAG"
+        echo "- Quoteofday: ${{ vars.DOCKER_REGISTRY }}/quoteofday:$QUOTE_IMAGE_TAG"
+        echo "- Quotopia UI: ${{ vars.DOCKER_REGISTRY }}/quotopia-ui:$UI_IMAGE_TAG"
 
     - name: Pull Docker images
       run: |
@@ -81,11 +80,11 @@ jobs:
         
         # Pull quoteofday image
         echo "📦 Pulling quoteofday image..."
-        docker pull ${{ env.DOCKER_REGISTRY }}/quoteofday:${{ steps.get-images.outputs.quote_version }}
+        docker pull ${{ vars.DOCKER_REGISTRY }}/quoteofday:${{ steps.get-images.outputs.quote_version }}
         
         # Pull quotopia-ui image
         echo "📦 Pulling quotopia-ui image..."
-        docker pull ${{ env.DOCKER_REGISTRY }}/quotopia-ui:${{ steps.get-images.outputs.ui_version }}
+        docker pull ${{ vars.DOCKER_REGISTRY }}/quotopia-ui:${{ steps.get-images.outputs.ui_version }}
         
         echo "✅ All images pulled successfully"
 
@@ -97,14 +96,14 @@ jobs:
         echo "🔧 Starting quoteofday service..."
         docker run -d --name quoteofday-service \
           -p 8001:8001 \
-          ${{ env.DOCKER_REGISTRY }}/quoteofday:${{ steps.get-images.outputs.quote_version }}
+          ${{ vars.DOCKER_REGISTRY }}/quoteofday:${{ steps.get-images.outputs.quote_version }}
         
         # Start quotopia-ui service
         echo "🔧 Starting quotopia-ui service..."
         docker run -d --name quotopia-ui-service \
           -p 8081:80 \
           --add-host host.docker.internal:host-gateway \
-          ${{ env.DOCKER_REGISTRY }}/quotopia-ui:${{ steps.get-images.outputs.ui_version }}
+          ${{ vars.DOCKER_REGISTRY }}/quotopia-ui:${{ steps.get-images.outputs.ui_version }}
         
         # Wait for services to be ready
         echo "⏳ Waiting for services to be ready..."

@@ -114,7 +114,7 @@ jobs:
 #        subject-name: quote-of-day-service
 #        subject-version: 1.0.0-${{ github.run_number }}
 #        subject-digest: ${{ steps.get_sha256.outputs.sha256 }}
-#        subject-repository-url: apptrustswampupc.jfrog.io/quotopia-proj-dev-maven-virt-local 
+#        subject-repository-url: swampupsec.jfrog.io/quotopia-proj-dev-maven-virt-local 
 
     - name: Compile java for Sonar scan
       run: |
